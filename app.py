@@ -1,6 +1,6 @@
 import streamlit as st
 import torch
-from ultralytics import YOLO
+from ultralytics import YOLOv10
 from PIL import Image
 
 # Setting page layout
@@ -27,7 +27,7 @@ max_det = st.sidebar.slider(
 # Load YOLO model
 @st.cache_resource()
 def main_model():
-    model = YOLO('best.pt')
+    model = YOLOv10('best.pt')
     return model
 
 # File uploader widget
