@@ -2,6 +2,7 @@ import streamlit as st
 import torch
 from ultralytics import YOLO
 from PIL import Image
+import supervision as sv
 bounding_box_annotator = sv.BoundingBoxAnnotator()
 label_annotator = sv.LabelAnnotator()
 
