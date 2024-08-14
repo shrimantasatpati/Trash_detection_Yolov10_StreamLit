@@ -51,7 +51,7 @@ with col2:
             # Make predictions on the uploaded image
             with torch.no_grad():
                 model = main_model()
-                results = model.predict(
+                results = model(
                     task="detect",
                     source=uploaded_image,
                     max_det=max_det,
