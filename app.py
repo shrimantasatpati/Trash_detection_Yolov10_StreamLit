@@ -1,7 +1,9 @@
 import streamlit as st
 import torch
-from ultralytics import YOLO
+from ultralytics import YOLOv10
 from PIL import Image
+bounding_box_annotator = sv.BoundingBoxAnnotator()
+label_annotator = sv.LabelAnnotator()
 
 # Setting page layout
 st.set_page_config(
@@ -27,7 +29,7 @@ max_det = st.sidebar.slider(
 # Load YOLO model
 @st.cache_resource()
 def main_model():
-    model = YOLO('best.pt')
+    model = YOLOv10('best.pt')
     return model
 
 # File uploader widget
@@ -51,24 +53,34 @@ with col2:
             # Make predictions on the uploaded image
             with torch.no_grad():
                 model = main_model()
-                results = model(
-                    task="detect",
-                    source=uploaded_image,
-                    max_det=max_det,
-                    conf=confidence,
-                    # show_labels=show_labels,
-                    # show_boxes=show_boxes,
-                    save=False,
-                    device="cpu"
-                )
-                boxes = results[0].boxes
-                res_plotted = results[0].plot()[:, :, ::-1]
-                st.image(res_plotted, caption='Detect Image',
-                         use_column_width=True)
+                # results = model(
+                #     task="detect",
+                #     source=uploaded_image,
+                #     max_det=max_det,
+                #     conf=confidence,
+                #     # show_labels=show_labels,
+                #     # show_boxes=show_boxes,
+                #     save=False,
+                #     device="cpu"
+                # )
+                # boxes = results[0].boxes
+                # res_plotted = results[0].plot()[:, :, ::-1]
+                # st.image(res_plotted, caption='Detect Image',
+                #          use_column_width=True)
 
-            with st.expander("Detection Results"):
-                for box in boxes:
-                    st.write(box.data)
+                results = model(source=uploaded_image, conf=0.25)[0]
+                detections = sv.Detections.from_ultralytics(results)
+                
+                annotated_image = bounding_box_annotator.annotate(
+                    scene=random_image, detections=detections)
+                annotated_image = label_annotator.annotate(
+                    scene=annotated_image, detections=detections)
+                
+                sv.plot_image(annotated_image)
+
+            # with st.expander("Detection Results"):
+            #     for box in boxes:
+            #         st.write(box.data)
 
         except Exception as ex:
             st.exception(ex)
