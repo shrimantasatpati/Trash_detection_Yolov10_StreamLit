@@ -1,6 +1,6 @@
 import streamlit as st
 import torch
-from ultralytics import YOLOv10
+from ultralytics import YOLO
 from PIL import Image
 bounding_box_annotator = sv.BoundingBoxAnnotator()
 label_annotator = sv.LabelAnnotator()
@@ -29,7 +29,7 @@ max_det = st.sidebar.slider(
 # Load YOLO model
 @st.cache_resource()
 def main_model():
-    model = YOLOv10('best.pt')
+    model = YOLO('best.pt')
     return model
 
 # File uploader widget
