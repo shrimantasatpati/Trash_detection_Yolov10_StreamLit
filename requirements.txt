@@ -1,4 +1,4 @@
-ultralytics==8.2.38
+ultralytics==8.2.77
 streamlit
 opencv-python-headless
 supervision
