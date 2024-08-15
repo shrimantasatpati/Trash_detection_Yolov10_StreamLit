@@ -11,3 +11,6 @@ References:
 - How to Train YOLOv10 models on Your Custom Dataset (youtube.com)
 - YOLOv10: How to Train for Object Detection on a Custom Dataset (youtube.com)
 - TACO YOLOv8 Train and Predict w/wandb (kaggle.com)
+
+
+<img width="866" alt="image_1" src="https://github.com/user-attachments/assets/5369bd49-19ef-4df9-9759-19c25ae13b36">
