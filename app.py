@@ -81,9 +81,9 @@ with col2:
                 # sv.plot_image(annotated_image)
                 
 
-            # with st.expander("Detection Results"):
-            #     for box in boxes:
-            #         st.write(box.data)
+            with st.expander("Detection Results"):
+                for box in boxes:
+                    st.write(box.data)
 
         except Exception as ex:
             st.exception(ex)
