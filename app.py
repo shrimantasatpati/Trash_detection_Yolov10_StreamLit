@@ -1,6 +1,6 @@
 import streamlit as st
 import torch
-from ultralytics import YOLOv10
+from ultralytics import YOLO
 from PIL import Image
 import supervision as sv
 bounding_box_annotator = sv.BoundingBoxAnnotator()
@@ -30,7 +30,7 @@ max_det = st.sidebar.slider(
 # Load YOLO model
 @st.cache_resource()
 def main_model():
-    model = YOLOv10('best.pt')
+    model = YOLO('best.pt')
     return model
 
 # File uploader widget
@@ -54,7 +54,7 @@ with col2:
             # Make predictions on the uploaded image
             with torch.no_grad():
                 model = main_model()
-                results = model.predict(
+                results = model(
                     task="detect",
                     source=uploaded_image,
                     max_det=max_det,
