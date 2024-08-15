@@ -74,7 +74,7 @@ with col2:
                 detections = sv.Detections.from_ultralytics(results[0])
                 
                 annotated_image = bounding_box_annotator.annotate(
-                    scene=random_image, detections=detections)
+                    scene=uploaded_image, detections=detections)
                 annotated_image = label_annotator.annotate(
                     scene=annotated_image, detections=detections)
                 
