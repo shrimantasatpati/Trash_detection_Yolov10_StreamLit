@@ -22,8 +22,8 @@ st.sidebar.header("ML Model Config")
 
 confidence = float(st.sidebar.slider(
     "Select Model Confidence", 5, 100, 20)) / 100
-max_det = st.sidebar.slider(
-    "Select maximum number of detected objects", 5, 1000, 20)
+# max_det = st.sidebar.slider(
+#     "Select maximum number of detected objects", 5, 1000, 20)
 # show_labels = st.sidebar.radio("Show Labels", [True, False], index=0)
 # show_boxes = st.sidebar.radio("Show Boxes", [True, False], index=0)
 
@@ -57,7 +57,7 @@ with col2:
                 results = model(
                     task="detect",
                     source=uploaded_image,
-                    max_det=max_det,
+                    # max_det=max_det,
                     conf=confidence,
                     # show_labels=show_labels,
                     # show_boxes=show_boxes,
