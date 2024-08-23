@@ -37,7 +37,7 @@ def main_model(model_choice):
     if model_choice == "Model 1":
         model = YOLO('best.pt')
     else:
-        model = YOLO('best_yolov10_garbage_calssification.pt')
+        model = YOLO('best_yolov10_garbage_classification.pt')
     return model
 
 # File uploader widget
