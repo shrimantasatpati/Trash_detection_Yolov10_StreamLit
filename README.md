@@ -14,3 +14,5 @@ References:
 
 
 <img width="866" alt="image_1" src="https://github.com/user-attachments/assets/5369bd49-19ef-4df9-9759-19c25ae13b36">
+
+best_yolov10_garbage_classification.pt - weights after YOLOv10 finetuned on the https://universe.roboflow.com/material-identification/garbage-classification-3/dataset/2 dataset.
