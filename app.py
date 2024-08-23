@@ -83,6 +83,21 @@ with col2:
                 st.image(res_plotted, caption='Detect Image',
                          use_column_width=True)
 
+                                
+                # Count the number of objects for each detected class
+                class_counts = {}
+                for cls in boxes.cls:
+                    class_name = model.names[int(cls)]
+                    if class_name in class_counts:
+                        class_counts[class_name] += 1
+                    else:
+                        class_counts[class_name] = 1
+                
+                # Display the number of objects for each detected class
+                st.write("Number of objects for each detected class:")
+                for class_name, count in class_counts.items():
+                    st.write(f"{class_name}: {count}")
+
                 # results = model(source=uploaded_image, conf=0.25)[0]
                 # results[0].show()
                 # detections = sv.Detections.from_ultralytics(results[0])
