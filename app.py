@@ -20,8 +20,15 @@ st.title("Trash detection - YOLOv10")
 # Sidebar
 st.sidebar.header("ML Model Config")
 
-confidence = float(st.sidebar.slider(
-    "Select Model Confidence", 5, 100, 20)) / 100
+# confidence = float(st.sidebar.slider(
+#     "Select Model Confidence", 5, 100, 20)) / 100
+confidence = st.sidebar.slider(
+    "Select Model Confidence", 
+    min_value=0.0,
+    max_value=1.0,
+    value=0.2,  # Default value
+    step=0.05
+)
 model_choice = st.sidebar.radio("Select Model", ["Model 1", "Model 2"])
 # max_det = st.sidebar.slider(
 #     "Select maximum number of detected objects", 5, 1000, 20)
