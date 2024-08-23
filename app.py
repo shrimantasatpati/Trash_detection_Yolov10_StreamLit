@@ -60,7 +60,7 @@ with col2:
         try:
             # Make predictions on the uploaded image
             with torch.no_grad():
-                model = main_model()
+                model = main_model(model_choice)
                 results = model(
                     task="detect",
                     source=uploaded_image,
