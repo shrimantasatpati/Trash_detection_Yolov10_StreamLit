@@ -22,6 +22,7 @@ st.sidebar.header("ML Model Config")
 
 confidence = float(st.sidebar.slider(
     "Select Model Confidence", 5, 100, 20)) / 100
+model_choice = st.sidebar.radio("Select Model", ["Model 1", "Model 2"])
 # max_det = st.sidebar.slider(
 #     "Select maximum number of detected objects", 5, 1000, 20)
 # show_labels = st.sidebar.radio("Show Labels", [True, False], index=0)
@@ -29,8 +30,14 @@ confidence = float(st.sidebar.slider(
 
 # Load YOLO model
 @st.cache_resource()
-def main_model():
-    model = YOLO('best.pt')
+# def main_model():
+#     model = YOLO('best.pt')
+#     return model
+def main_model(model_choice):
+    if model_choice == "Model 1":
+        model = YOLO('best.pt')
+    else:
+        model = YOLO('best_yolov10_garbage_calssification.pt')
     return model
 
 # File uploader widget
