@@ -93,10 +93,13 @@ with col2:
                     else:
                         class_counts[class_name] = 1
                 
-                # Display the number of objects for each detected class
+                                
+                # Prepare data for the table
+                table_data = [{"Class": class_name, "Count": count} for class_name, count in class_counts.items()]
+                
+                # Display the table
                 st.write("Number of objects for each detected class:")
-                for class_name, count in class_counts.items():
-                    st.write(f"{class_name}: {count}")
+                st.table(table_data)
 
                 # results = model(source=uploaded_image, conf=0.25)[0]
                 # results[0].show()
