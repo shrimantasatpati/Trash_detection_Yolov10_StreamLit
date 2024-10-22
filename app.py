@@ -425,4 +425,4 @@ else:  # Video processing
 
 # Footer
 st.sidebar.markdown("---")
-st.sidebar.markdown("Made with ❤️ by Your Shrimanta Satpati")
+st.sidebar.markdown("Made with ❤️ by Shrimanta Satpati")
