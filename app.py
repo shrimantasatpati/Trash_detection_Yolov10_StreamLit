@@ -267,7 +267,7 @@ confidence = st.sidebar.slider(
 # Source type selection
 source_type = st.sidebar.radio("Select Source Type", ["Image", "Video"])
 
-model_choice = st.sidebar.radio("Select Model", ["Model 1", "Model 2"])
+model_choice = st.sidebar.radio("Select Model", ["Model"])
 
 # Load YOLO model
 @st.cache_resource
