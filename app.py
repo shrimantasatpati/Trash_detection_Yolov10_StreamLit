@@ -193,7 +193,6 @@ else:  # Video processing
                              for class_name, count in total_class_counts.items()]
                 st.table(table_data)
                 
-                # Add download button with some styling
                 col1, col2, col3 = st.columns([1,2,1])
                 with col2:
                     st.download_button(
