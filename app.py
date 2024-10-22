@@ -19,11 +19,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-
-# Main page heading
 st.title("Trash detection - YOLOv10")
-
-# Sidebar
 st.sidebar.header("ML Model Config")
 
 # Model configuration
@@ -37,7 +33,6 @@ confidence = st.sidebar.slider(
 
 # Source type selection
 source_type = st.sidebar.radio("Select Source Type", ["Image", "Video"])
-
 model_choice = st.sidebar.radio("Select Model", ["Model"])
 
 # Load YOLO model
@@ -66,6 +61,15 @@ def process_frame(model, frame, confidence):
         )
         return results[0]
 
+# Function to create a download link
+def get_video_download_link(video_path, filename="processed_video.mp4"):
+    """Generates a link to download the video file."""
+    with open(video_path, 'rb') as f:
+        video_bytes = f.read()
+    b64 = base64.b64encode(video_bytes).decode()
+    href = f'<a href="data:video/mp4;base64,{b64}" download="{filename}">Download Processed Video</a>'
+    return href
+
 # Display detection results
 def display_detection_results(results):
     boxes = results.boxes
@@ -91,8 +95,7 @@ def display_detection_results(results):
     with st.expander("Detection Results"):
         for box in boxes:
             st.write(box.data)
-
-# Main application logic
+            
 if source_type == "Image":
     # Image upload
     uploaded_file = st.file_uploader(
@@ -125,19 +128,24 @@ else:  # Video processing
     uploaded_file = st.file_uploader("Choose a video...", type=['mp4', 'avi', 'mov'])
     
     if uploaded_file is not None:
-        # Save uploaded video to temporary file
-        tfile = tempfile.NamedTemporaryFile(delete=False, suffix='.mp4')
-        tfile.write(uploaded_file.read())
+        # Create a temporary directory
+        temp_dir = tempfile.mkdtemp()
+        input_path = os.path.join(temp_dir, "input.mp4")
+        output_path = os.path.join(temp_dir, "output.mp4")
+        
+        # Save uploaded video
+        with open(input_path, 'wb') as f:
+            f.write(uploaded_file.read())
         
         # Display uploaded video
-        st.video(uploaded_file)
+        st.video(input_path)
         
         if st.sidebar.button('Detect'):
             try:
                 model = main_model()
                 
                 # Read video
-                cap = cv2.VideoCapture(tfile.name)
+                cap = cv2.VideoCapture(input_path)
                 
                 # Get video properties
                 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -145,13 +153,10 @@ else:  # Video processing
                 fps = int(cap.get(cv2.CAP_PROP_FPS))
                 total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
                 
-                # Create temporary output file
-                output_path = str(Path(tempfile.mkdtemp()) / "output.mp4")
-                
-                # Initialize video writer
+                # Initialize video writer with H.264 codec
                 out = cv2.VideoWriter(
                     output_path,
-                    cv2.VideoWriter_fourcc(*'mp4v'),
+                    cv2.VideoWriter_fourcc(*'avc1'),  # Using H.264 codec
                     fps,
                     (width, height)
                 )
@@ -161,14 +166,22 @@ else:  # Video processing
                 progress_bar = st.progress(0)
                 frame_count = 0
                 
+                # Container for detection statistics
+                total_class_counts = {}
+                
                 while cap.isOpened():
                     ret, frame = cap.read()
                     if not ret:
                         break
                     
                     # Process frame
-                    results = process_frame(model, frame, confidence)
-                    processed_frame = results.plot()
+                    results = model(frame, conf=confidence)
+                    processed_frame = results[0].plot()
+                    
+                    # Update class counts
+                    for box in results[0].boxes:
+                        class_name = model.names[int(box.cls)]
+                        total_class_counts[class_name] = total_class_counts.get(class_name, 0) + 1
                     
                     # Write processed frame
                     out.write(processed_frame)
@@ -181,16 +194,30 @@ else:  # Video processing
                 cap.release()
                 out.release()
                 
-                # Display processed video
+                # Display results
                 st.success("Video processing complete!")
+                
+                # Display detection statistics
+                st.write("Total detections throughout the video:")
+                table_data = [{"Class": class_name, "Total Count": count} 
+                             for class_name, count in total_class_counts.items()]
+                st.table(table_data)
+                
+                # Display processed video
                 st.video(output_path)
                 
-                # Clean up temporary files
-                os.unlink(tfile.name)
-                os.unlink(output_path)
+                # Create download button
+                st.markdown(get_video_download_link(output_path), unsafe_allow_html=True)
                 
             except Exception as ex:
                 st.exception(ex)
+            finally:
+                # Clean up temporary files
+                if os.path.exists(input_path):
+                    os.remove(input_path)
+                if os.path.exists(output_path):
+                    os.remove(output_path)
+                os.rmdir(temp_dir)
     else:
         st.info("Please upload a video.")
 
