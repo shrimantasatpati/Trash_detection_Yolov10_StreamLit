@@ -23,7 +23,7 @@ st.set_page_config(
 )
 
 st.title("Trash detection - YOLOv10")
-st.sidebar.header("ML Model Config")
+st.sidebar.header("Model Config")
 
 # Model configuration
 confidence = st.sidebar.slider(
