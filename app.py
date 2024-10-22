@@ -22,10 +22,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Main page heading
 st.title("Trash detection - YOLOv10")
-
-# Sidebar
 st.sidebar.header("ML Model Config")
 
 # Model configuration
@@ -39,7 +36,6 @@ confidence = st.sidebar.slider(
 
 # Source type selection
 source_type = st.sidebar.radio("Select Source Type", ["Image", "Video"])
-
 model_choice = st.sidebar.radio("Select Model", ["Model"])
 
 # Load YOLO model
@@ -56,8 +52,7 @@ def process_uploaded_video(video_bytes):
 
     try:
         # Read the video
-        cap = cv2.VideoCapture(video_path)
-        
+        cap = cv2.VideoCapture(video_path)        
         # Get video properties
         width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -74,7 +69,8 @@ def process_uploaded_video(video_bytes):
         
         # Load model
         model = main_model()
-        
+
+        st.success("Processing video")        
         # Process frames
         progress_bar = st.progress(0)
         frame_count = 0
