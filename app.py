@@ -119,7 +119,7 @@ def process_uploaded_video(video_bytes):
             os.unlink(output_path)
 
 if source_type == "Image":
-    # Image processing code (unchanged)
+    # Image processing code
     uploaded_file = st.file_uploader(
         "Choose an image...",
         type=['jpg', 'jpeg', 'png', "bmp", "webp"]
@@ -176,9 +176,15 @@ else:  # Video processing
     uploaded_file = st.file_uploader("Choose a video...", type=['mp4', 'avi', 'mov'])
     
     if uploaded_file is not None:
-        # Display original video
+        # Display original video in a smaller size
         video_bytes = uploaded_file.read()
-        st.video(video_bytes)
+        
+        # Create a container with custom width
+        video_container = st.container()
+        with video_container:
+            col1, col2, col3 = st.columns([1,2,1])  # Creates three columns with middle one being larger
+            with col2:  # Use the middle column for the video
+                st.video(video_bytes)
         
         if st.sidebar.button('Detect'):
             try:
@@ -191,16 +197,15 @@ else:  # Video processing
                              for class_name, count in total_class_counts.items()]
                 st.table(table_data)
                 
-                # Display processed video
-                st.video(processed_video_bytes)
-                
-                # Add download button
-                st.download_button(
-                    label="Download processed video",
-                    data=processed_video_bytes,
-                    file_name="processed_video.mp4",
-                    mime="video/mp4"
-                )
+                # Add download button with some styling
+                col1, col2, col3 = st.columns([1,2,1])
+                with col2:
+                    st.download_button(
+                        label="⬇️ Download processed video",
+                        data=processed_video_bytes,
+                        file_name="processed_video.mp4",
+                        mime="video/mp4",
+                    )
                 
             except Exception as ex:
                 st.exception(ex)
