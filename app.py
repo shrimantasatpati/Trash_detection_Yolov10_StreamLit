@@ -143,8 +143,6 @@ else:  # Video processing
         if st.sidebar.button('Detect'):
             try:
                 model = main_model()
-                
-                # Read video
                 cap = cv2.VideoCapture(input_path)
                 
                 # Get video properties
@@ -202,11 +200,7 @@ else:  # Video processing
                 table_data = [{"Class": class_name, "Total Count": count} 
                              for class_name, count in total_class_counts.items()]
                 st.table(table_data)
-                
-                # Display processed video
                 st.video(output_path)
-                
-                # Create download button
                 st.markdown(get_video_download_link(output_path), unsafe_allow_html=True)
                 
             except Exception as ex:
